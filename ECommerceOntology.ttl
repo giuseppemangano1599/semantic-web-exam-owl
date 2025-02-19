@@ -1,0 +1,920 @@
+###############################################################################
+# Giuseppe Mangano - Semantic Web Exam - Session 02/2025 - University of Pisa #
+###############################################################################
+
+@prefix : <http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/> .
+
+<http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology#includesProduct
+:includesProduct rdf:type owl:ObjectProperty ;
+                 rdfs:subPropertyOf :involvesTransaction ;
+                 owl:inverseOf :isIncludedInOrder ;
+                 rdfs:domain :Order ;
+                 rdfs:range :Product ;
+                 rdfs:comment "includesProduct relates an order to the product it contains and it is the inverse of isIncludedInOrder."@en ;
+                 rdfs:label "includesProduct" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology#isIncludedInOrder
+:isIncludedInOrder rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf :involvesTransaction ;
+                   rdfs:domain :Product ;
+                   rdfs:range :Order ;
+                   rdfs:comment "isIncludedInOrder relates a product to its order and it is the inverse of includesProduct." ;
+                   rdfs:label "isIncludedInOrder" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/containsProduct
+:containsProduct rdf:type owl:ObjectProperty ;
+                 rdfs:subPropertyOf :relatesToStore ;
+                 owl:inverseOf :isContainedIn ;
+                 rdfs:domain :Store ;
+                 rdfs:range :Product ;
+                 rdfs:comment "containsProduct relates a store to a product contained in it and it is the inverse of isContainedIn."@en ;
+                 rdfs:label "containsProduct" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/hasAuthor
+:hasAuthor rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf :relatesToProduct ;
+           owl:inverseOf :isAuthorOf ;
+           rdf:type owl:FunctionalProperty ;
+           rdfs:domain :Review ;
+           rdfs:range :Author ;
+           rdfs:comment "hasAuthor relates the review to its author and it is the inverse of isAuthorOf ."@en ;
+           rdfs:label "hasAuthor" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/hasCategory
+:hasCategory rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf :relatesToProduct ;
+             owl:inverseOf :isCategoryOf ;
+             rdfs:domain :Product ;
+             rdfs:range :Category ;
+             rdfs:comment "hasCategory relates the product with its category and it is the inverse of isCategoryOf."@en ;
+             rdfs:label "hasCategory" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/hasPaymentMethod
+:hasPaymentMethod rdf:type owl:ObjectProperty ;
+                  rdfs:subPropertyOf :involvesTransaction ;
+                  owl:inverseOf :isPaymentMethodOf ;
+                  rdf:type owl:FunctionalProperty ;
+                  rdfs:domain :Payment ;
+                  rdfs:range :PaymentMethod ;
+                  rdfs:comment "hasPaymentMethod relates a payment to the payment method used in an order and it is the inverse of isPaymentMethodOf."@en ;
+                  rdfs:label "hasPaymentMethod" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/hasReview
+:hasReview rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf :relatesToProduct ;
+           owl:inverseOf :isReviewOf ;
+           rdfs:domain :Product ;
+           rdfs:range :Review ;
+           rdfs:comment "hasReview relates a product to a review that an author has done and it is the inverse of isReviewOf."@en ;
+           rdfs:label "hasReview" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/involvesTransaction
+:involvesTransaction rdf:type owl:ObjectProperty ;
+                     rdfs:comment "involvesTransaction is a general property for transactional relationship"@en ;
+                     rdfs:label "involvesTransaction" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/isAuthorOf
+:isAuthorOf rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf :relatesToProduct ;
+            rdf:type owl:InverseFunctionalProperty ;
+            rdfs:domain :Author ;
+            rdfs:range :Review ;
+            rdfs:comment "isAuthorOf relates the author of a review to the review itself and it is the inverse of hasAuthor."@en ;
+            rdfs:label "isAuthorOf" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/isCategoryOf
+:isCategoryOf rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf :relatesToProduct ;
+              rdfs:domain :Category ;
+              rdfs:range :Product ;
+              rdfs:comment "isCategoryOf relates a category to the product it belongs to and is the inverse of hasCategory."@en ;
+              rdfs:label "isCategoryOf" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/isContainedIn
+:isContainedIn rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf :relatesToStore ;
+               rdfs:domain :Product ;
+               rdfs:range :Store ;
+               rdfs:comment "isContainedIn relates a product to the store in which is contained in it and it is the inverse of containsProduct."@en ;
+               rdfs:label "isContainedIn" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/isManagedBy
+:isManagedBy rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf :relatesToStore ;
+             owl:inverseOf :managesStore ;
+             rdfs:domain :Store ;
+             rdfs:range :Seller ;
+             rdfs:comment "isManagedBy relates a store store to its seller and it is the inverse of managesStore."@en ;
+             rdfs:label "isManagedBy" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/isOwnedBy
+:isOwnedBy rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf :involvesTransaction ;
+           owl:inverseOf :ownsPaymentMethod ;
+           rdfs:domain :PaymentMethod ;
+           rdfs:range :Buyer ;
+           rdfs:comment "isOwnedBy relates a payment method to their buyer and it is the inverse of ownsPaymentMethod."@en ;
+           rdfs:label "isOwnedBy" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/isPaymentMethodOf
+:isPaymentMethodOf rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf :involvesTransaction ;
+                   rdf:type owl:InverseFunctionalProperty ;
+                   rdfs:domain :PaymentMethod ;
+                   rdfs:range :Payment ;
+                   rdfs:comment "isPaymentMethodOf relates a payment method used to pay an order to the payment itself and it is the inverse of hasPaymentMethod."@en ;
+                   rdfs:label "isPaymentMethodOf" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/isPlacedBy
+:isPlacedBy rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf :involvesTransaction ;
+            owl:inverseOf :placesOrder ;
+            rdf:type owl:FunctionalProperty ;
+            rdfs:domain :Order ;
+            rdfs:range :Buyer ;
+            rdfs:comment "isPlacedBy relates an order to its buyer and its inverse is placesOrder."@en ;
+            rdfs:label "isPlacedBy" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/isProcessedBy
+:isProcessedBy rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf :involvesTransaction ;
+               owl:inverseOf :processesOrder ;
+               rdf:type owl:InverseFunctionalProperty ;
+               rdfs:domain :Order ;
+               rdfs:range :Payment ;
+               rdfs:comment "isProcessedBy relates an order and its payment and it is the inverse of processesOrder."@en ;
+               rdfs:label "isProcessedBy" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/isReviewOf
+:isReviewOf rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf :relatesToProduct ;
+            rdf:type owl:FunctionalProperty ;
+            rdfs:domain :Review ;
+            rdfs:range :Product ;
+            rdfs:comment "isReviewOf relates a review that an author has done to a product and it is the inverse of hasReview."@en ;
+            rdfs:label "isReviewOf" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/isReviewedBy
+:isReviewedBy rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf :relatesToProduct ;
+              owl:inverseOf :reviewsProduct ;
+              rdfs:domain :Product ;
+              rdfs:range :Author ;
+              rdfs:comment "isReviewedBy relates a review of a product to its author and it is the inverse of reviewsProduct."@en ;
+              rdfs:label "isReviewedBy" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/isSoldBy
+:isSoldBy rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf :relatesToProduct ;
+          owl:inverseOf :sellsProduct ;
+          rdfs:domain :Product ;
+          rdfs:range :Seller ;
+          rdfs:comment "isSoldBy relates a product to their seller and it is the inverse of sellsProduct."@en ;
+          rdfs:label "isSoldBy" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/managesStore
+:managesStore rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf :relatesToStore ;
+              rdfs:domain :Seller ;
+              rdfs:range :Store ;
+              rdfs:comment "managesStore relates a seller to a store and it is the inverse of isManagedBy."@en ;
+              rdfs:label "managesStore" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/ownsPaymentMethod
+:ownsPaymentMethod rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf :involvesTransaction ;
+                   rdfs:domain :Buyer ;
+                   rdfs:range :PaymentMethod ;
+                   owl:propertyChainAxiom ( :placesOrder
+                                            :isProcessedBy
+                                            :hasPaymentMethod
+                                          ) ;
+                   rdfs:comment "ownsPaymentMethod relates a buyer to a payment method and it is the inverse of isOwnedBy."@en ;
+                   rdfs:label "ownsPaymentMethod" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/placesOrder
+:placesOrder rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf :involvesTransaction ;
+             rdfs:domain :Buyer ;
+             rdfs:range :Order ;
+             rdfs:comment "placesOrder relates a buyer to its order and its inverse is isPlacedBy."@en ;
+             rdfs:label "placesOrder" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/processesOrder
+:processesOrder rdf:type owl:ObjectProperty ;
+                rdfs:subPropertyOf :involvesTransaction ;
+                rdf:type owl:FunctionalProperty ;
+                rdfs:domain :Payment ;
+                rdfs:range :Order ;
+                rdfs:comment "processesOrder relates a payment to the order it processes and is the inverse of isProcessedBy."@en ;
+                rdfs:label "processesOrder" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/relatesToProduct
+:relatesToProduct rdf:type owl:ObjectProperty ;
+                  rdfs:comment "relatesToProduct is a general property for product-related relationships."@en ;
+                  rdfs:label "relatesToProduct" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/relatesToStore
+:relatesToStore rdf:type owl:ObjectProperty ;
+                rdfs:comment "relatesToStore is a general property for store-related relationships."@en ;
+                rdfs:label "relatesToStore" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/reviewsProduct
+:reviewsProduct rdf:type owl:ObjectProperty ;
+                rdfs:subPropertyOf :relatesToProduct ;
+                rdfs:domain :Author ;
+                rdfs:range :Product ;
+                rdfs:comment "reviewsProduct relates an author to one review of a product and it is the inverse of isReviewedBy."@en ;
+                rdfs:label "reviewsProduct" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/sellsProduct
+:sellsProduct rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf :relatesToProduct ;
+              rdfs:domain :Seller ;
+              rdfs:range :Product ;
+              rdfs:comment "sellsProduct relates a seller to a product which is sold by them and it is the inverse of isSoldBy."@en ;
+              rdfs:label "sellsProduct" .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/hasBuyerID
+:hasBuyerID rdf:type owl:DatatypeProperty ,
+                     owl:FunctionalProperty ;
+            rdfs:domain :Buyer ;
+            rdfs:range xsd:string ;
+            rdfs:comment "hasBuyerID is a unique identifier for a buyer."@en ;
+            rdfs:label "hasBuyerID" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/hasBuyerName
+:hasBuyerName rdf:type owl:DatatypeProperty ,
+                       owl:FunctionalProperty ;
+              rdfs:domain :Buyer ;
+              rdfs:range xsd:string ;
+              rdfs:comment "hasBuyerName is the name of a buyer."@en ;
+              rdfs:label "hasBuyerName" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/hasDate
+:hasDate rdf:type owl:DatatypeProperty ,
+                  owl:FunctionalProperty ;
+         rdfs:domain :Order ;
+         rdfs:range xsd:dateTime ;
+         rdfs:comment "hasDate is the date when an order was placed"@en ;
+         rdfs:label "hasDate" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/hasOrderID
+:hasOrderID rdf:type owl:DatatypeProperty ,
+                     owl:FunctionalProperty ;
+            rdfs:domain :Order ;
+            rdfs:range xsd:string ;
+            rdfs:comment "hasOrderID is a unique identifier for an order."@en ;
+            rdfs:label "hasOrderID" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/hasPaymentID
+:hasPaymentID rdf:type owl:DatatypeProperty ,
+                       owl:FunctionalProperty ;
+              rdfs:domain :Payment ;
+              rdfs:range xsd:string ;
+              rdfs:comment "hasPaymentID is a unique identifier for a payment."@en ;
+              rdfs:label "hasPaymentID" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/hasPrice
+:hasPrice rdf:type owl:DatatypeProperty ,
+                   owl:FunctionalProperty ;
+          rdfs:domain :Product ;
+          rdfs:range xsd:float ;
+          rdfs:comment "hasPrice is the price of a product.."@en ;
+          rdfs:label "hasPrice" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/hasProductID
+:hasProductID rdf:type owl:DatatypeProperty ,
+                       owl:FunctionalProperty ;
+              rdfs:domain :Product ;
+              rdfs:range xsd:string ;
+              rdfs:comment "hasProductID is a unique identifier for a product."@en ;
+              rdfs:label "hasProductID" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/hasProductName
+:hasProductName rdf:type owl:DatatypeProperty ,
+                         owl:FunctionalProperty ;
+                rdfs:domain :Product ;
+                rdfs:range xsd:string ;
+                rdfs:comment "hasProductName is the name of a Product."@en ;
+                rdfs:label "hasProductName" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/hasReviewDescription
+:hasReviewDescription rdf:type owl:DatatypeProperty ,
+                               owl:FunctionalProperty ;
+                      rdfs:domain :Review ;
+                      rdfs:range xsd:string ;
+                      rdfs:comment "hasReviewDescription is the text content of a review."@en ;
+                      rdfs:label "hasReviewDescription" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/hasReviewRating
+:hasReviewRating rdf:type owl:DatatypeProperty ,
+                          owl:FunctionalProperty ;
+                 rdfs:domain :Review ;
+                 rdfs:range xsd:positiveInteger ;
+                 rdfs:comment "hasReviewRating is a rating given in a review (positive integer)."@en ;
+                 rdfs:label "hasReviewRating" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/hasSellerID
+:hasSellerID rdf:type owl:DatatypeProperty ,
+                      owl:FunctionalProperty ;
+             rdfs:domain :Seller ;
+             rdfs:range xsd:string ;
+             rdfs:comment "hasSellerID is a unique identifier for a seller."@en ;
+             rdfs:label "hasSellerID" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/hasSellerName
+:hasSellerName rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
+               rdfs:domain :Seller ;
+               rdfs:range xsd:string ;
+               rdfs:comment "hasSellerName is the name of a seller."@en ;
+               rdfs:label "hasSellerName" .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/Author
+:Author rdf:type owl:Class ;
+        owl:equivalentClass [ owl:intersectionOf ( <http://xmlns.com/foaf/0.1/Person>
+                                                   [ rdf:type owl:Restriction ;
+                                                     owl:onProperty :placesOrder ;
+                                                     owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                     owl:onClass :Order
+                                                   ]
+                                                   [ rdf:type owl:Restriction ;
+                                                     owl:onProperty :reviewsProduct ;
+                                                     owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                     owl:onClass :Review
+                                                   ]
+                                                 ) ;
+                              rdf:type owl:Class
+                            ] ;
+        rdfs:subClassOf <http://xmlns.com/foaf/0.1/Person> ;
+        rdfs:comment "An author is a person who wrote at least one review and placed at least one order."@en ;
+        rdfs:label "Author"@en .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/BankTransfer
+:BankTransfer rdf:type owl:Class ;
+              rdfs:subClassOf :PaymentMethod ;
+              rdfs:comment "A payment method using bank transactions."@en ;
+              rdfs:label "Bank Transfer"@en .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/Buyer
+:Buyer rdf:type owl:Class ;
+       owl:equivalentClass [ owl:intersectionOf ( <http://xmlns.com/foaf/0.1/Person>
+                                                  [ rdf:type owl:Restriction ;
+                                                    owl:onProperty :placesOrder ;
+                                                    owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                    owl:onClass :Order
+                                                  ]
+                                                ) ;
+                             rdf:type owl:Class
+                           ] ;
+       rdfs:subClassOf <http://xmlns.com/foaf/0.1/Person> ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :ownsPaymentMethod ;
+                         owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onClass :PaymentMethod
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasBuyerID ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onDataRange xsd:string
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasBuyerName ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onDataRange xsd:string
+                       ] ;
+       rdfs:comment "A person who purchases products by placing orders."@en ;
+       rdfs:label "Buyer"@en .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/Category
+:Category rdf:type owl:Class ;
+          rdfs:subClassOf [ rdf:type owl:Restriction ;
+                            owl:onProperty :isCategoryOf ;
+                            owl:someValuesFrom :Product
+                          ] ;
+          rdfs:comment "A classification for products."@en ;
+          rdfs:label "Category" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/DebitCard
+:DebitCard rdf:type owl:Class ;
+           rdfs:subClassOf :PaymentMethod ;
+           rdfs:comment "A payment method using a debit card."@en ;
+           rdfs:label "Debit Card"@en .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/Order
+:Order rdf:type owl:Class ;
+       rdfs:subClassOf [ rdf:type owl:Restriction ;
+                         owl:onProperty :includesProduct ;
+                         owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onClass :Product
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :isPlacedBy ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onClass :Buyer
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :isProcessedBy ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onClass :Payment
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasDate ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onDataRange xsd:dateTime
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasOrderID ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onDataRange xsd:string
+                       ] ;
+       rdfs:comment "A record of a purchase made by a buyer."@en ;
+       rdfs:label "Order"@en .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/Payment
+:Payment rdf:type owl:Class ;
+         rdfs:subClassOf [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasPaymentMethod ;
+                           owl:allValuesFrom :PaymentMethod
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasPaymentMethod ;
+                           owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                           owl:onClass :PaymentMethod
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasPaymentID ;
+                           owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                           owl:onDataRange xsd:string
+                         ] ;
+         rdfs:comment "A transaction used to process an order."@en ;
+         rdfs:label "Payment"@en .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/PaymentMethod
+:PaymentMethod rdf:type owl:Class ;
+               rdfs:comment "A method used for making payments and it can be a bank transfer or payment with debit card."@en ;
+               rdfs:label "Payment Method"@en .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/Product
+:Product rdf:type owl:Class ;
+         rdfs:subClassOf [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasReview ;
+                           owl:someValuesFrom :Review
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasCategory ;
+                           owl:allValuesFrom :Category
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasCategory ;
+                           owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                           owl:onClass :Category
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasPrice ;
+                           owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                           owl:onDataRange xsd:float
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasProductID ;
+                           owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                           owl:onDataRange xsd:string
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasProductName ;
+                           owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                           owl:onDataRange xsd:string
+                         ] ;
+         rdfs:comment "An item available for sale in the e-commerce system."@en ;
+         rdfs:label "Product"@en .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/Review
+:Review rdf:type owl:Class ;
+        rdfs:subClassOf [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasAuthor ;
+                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                          owl:onClass :Author
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasReviewDescription ;
+                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                          owl:onDataRange xsd:string
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasReviewRating ;
+                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                          owl:onDataRange xsd:positiveInteger
+                        ] ;
+        rdfs:comment "A written evaluation of a product by an author."@en ;
+        rdfs:label "Review"@en .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/Seller
+:Seller rdf:type owl:Class ;
+        rdfs:subClassOf [ rdf:type owl:Restriction ;
+                          owl:onProperty :managesStore ;
+                          owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                          owl:onClass :Store
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :sellsProduct ;
+                          owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                          owl:onClass :Product
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasSellerID ;
+                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                          owl:onDataRange xsd:string
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :hasSellerName ;
+                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                          owl:onDataRange xsd:string
+                        ] ;
+        rdfs:comment "An entity that sells products and manages stores."@en ;
+        rdfs:label "Seller"@en .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/Store
+:Store rdf:type owl:Class ;
+       rdfs:subClassOf [ rdf:type owl:Restriction ;
+                         owl:onProperty :containsProduct ;
+                         owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onClass :Product
+                       ] ;
+       rdfs:comment "A location (physical or online) where products are sold."@en ;
+       rdfs:label "Store"@en .
+
+
+###  http://xmlns.com/foaf/0.1/Person
+<http://xmlns.com/foaf/0.1/Person> rdf:type owl:Class ;
+                                   rdfs:comment "The FOAF class that represents people."@en ;
+                                   rdfs:label "Person" .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology#store1
+:store1 rdf:type owl:NamedIndividual ,
+                 :Store ;
+        :containsProduct :product1 ,
+                         :product2 .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology#store2
+:store2 rdf:type owl:NamedIndividual ,
+                 :Store ;
+        :containsProduct :product3 ,
+                         :product4 .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/bankTransfer1
+:bankTransfer1 rdf:type owl:NamedIndividual ,
+                        :BankTransfer .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/bankTransfer2
+:bankTransfer2 rdf:type owl:NamedIndividual ,
+                        :BankTransfer .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/buyer1
+:buyer1 rdf:type owl:NamedIndividual ,
+                 :Buyer ;
+        :ownsPaymentMethod :debitCard1 ;
+        :placesOrder :order1 ,
+                     :order5 ;
+        :hasBuyerID "B001" ;
+        :hasBuyerName "Marco Rossi" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/buyer2
+:buyer2 rdf:type owl:NamedIndividual ,
+                 :Buyer ;
+        :ownsPaymentMethod :bankTransfer1 ;
+        :placesOrder :order2 ;
+        :hasBuyerID "B002" ;
+        :hasBuyerName "Francesca Neri" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/buyer3
+:buyer3 rdf:type owl:NamedIndividual ,
+                 :Buyer ;
+        :ownsPaymentMethod :debitCard2 ;
+        :placesOrder :order3 ;
+        :hasBuyerID "B003" ;
+        :hasBuyerName "Duilio Verdi" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/buyer4
+:buyer4 rdf:type owl:NamedIndividual ,
+                 :Buyer ;
+        :ownsPaymentMethod :bankTransfer2 ;
+        :placesOrder :order4 ;
+        :hasBuyerID "B004" ;
+        :hasBuyerName "Davide Castello" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/debitCard1
+:debitCard1 rdf:type owl:NamedIndividual ,
+                     :DebitCard .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/debitCard2
+:debitCard2 rdf:type owl:NamedIndividual ,
+                     :DebitCard .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/electronics
+:electronics rdf:type owl:NamedIndividual ,
+                      :Category .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/furniture
+:furniture rdf:type owl:NamedIndividual ,
+                    :Category .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/order1
+:order1 rdf:type owl:NamedIndividual ,
+                 :Order ;
+        :includesProduct :product1 ;
+        :isPlacedBy :buyer1 ;
+        :isProcessedBy :payment1 ;
+        :hasDate "2025-01-02T10:00:00"^^xsd:dateTime ;
+        :hasOrderID "O001" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/order2
+:order2 rdf:type owl:NamedIndividual ,
+                 :Order ;
+        :includesProduct :product3 ;
+        :isPlacedBy :buyer2 ;
+        :isProcessedBy :payment2 ;
+        :hasDate "2025-01-03T11:00:00"^^xsd:dateTime ;
+        :hasOrderID "O002" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/order3
+:order3 rdf:type owl:NamedIndividual ,
+                 :Order ;
+        :includesProduct :product2 ;
+        :isPlacedBy :buyer3 ;
+        :isProcessedBy :payment3 ;
+        :hasDate "2024-12-21T09:00:00"^^xsd:dateTime ;
+        :hasOrderID "O003" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/order4
+:order4 rdf:type owl:NamedIndividual ,
+                 :Order ;
+        :includesProduct :product4 ;
+        :isPlacedBy :buyer4 ;
+        :isProcessedBy :payment4 ;
+        :hasDate "2025-01-06T14:30:00"^^xsd:dateTime ;
+        :hasOrderID "O004" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/order5
+:order5 rdf:type owl:NamedIndividual ,
+                 :Order ;
+        :includesProduct :product3 ;
+        :isPlacedBy :buyer1 ;
+        :isProcessedBy :payment5 ;
+        :hasDate "2024-11-07T16:00:00"^^xsd:dateTime ;
+        :hasOrderID "O005" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/payment1
+:payment1 rdf:type owl:NamedIndividual ,
+                   :Payment ;
+          :hasPaymentMethod :debitCard1 ;
+          :hasPaymentID "Pmt001" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/payment2
+:payment2 rdf:type owl:NamedIndividual ,
+                   :Payment ;
+          :hasPaymentMethod :bankTransfer1 ;
+          :hasPaymentID "Pmt002" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/payment3
+:payment3 rdf:type owl:NamedIndividual ,
+                   :Payment ;
+          :hasPaymentMethod :debitCard2 ;
+          :hasPaymentID "Pmt003" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/payment4
+:payment4 rdf:type owl:NamedIndividual ,
+                   :Payment ;
+          :hasPaymentMethod :bankTransfer2 ;
+          :hasPaymentID "Pmt004" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/payment5
+:payment5 rdf:type owl:NamedIndividual ,
+                   :Payment ;
+          :hasPaymentMethod :debitCard1 ;
+          :hasPaymentID "Pmt005" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/product1
+:product1 rdf:type owl:NamedIndividual ,
+                   :Product ;
+          :hasCategory :electronics ;
+          :hasReview :review1 ;
+          :hasPrice "1200.0"^^xsd:float ;
+          :hasProductID "P001" ;
+          :hasProductName "Laptop" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/product2
+:product2 rdf:type owl:NamedIndividual ,
+                   :Product ;
+          :hasCategory :electronics ;
+          :hasPrice "800.0"^^xsd:float ;
+          :hasProductID "P002" ;
+          :hasProductName "Smartphone" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/product3
+:product3 rdf:type owl:NamedIndividual ,
+                   :Product ;
+          :hasCategory :furniture ;
+          :hasReview :review2 ;
+          :hasPrice "50.0"^^xsd:float ;
+          :hasProductID "P003" ;
+          :hasProductName "Desk Chair" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/product4
+:product4 rdf:type owl:NamedIndividual ,
+                   :Product ;
+          :hasCategory :stationery ;
+          :hasPrice "5.0"^^xsd:float ;
+          :hasProductID "P004" ;
+          :hasProductName "Notebook" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/review1
+:review1 rdf:type owl:NamedIndividual ,
+                  :Review ;
+         :hasAuthor :buyer1 ;
+         :isReviewOf :product1 ;
+         :hasReviewDescription "Great product!" ;
+         :hasReviewRating "5"^^xsd:positiveInteger .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/review2
+:review2 rdf:type owl:NamedIndividual ,
+                  :Review ;
+         :hasAuthor :buyer2 ;
+         :isReviewOf :product3 ;
+         :hasReviewDescription "Good value for money." ;
+         :hasReviewRating "4"^^xsd:positiveInteger .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/seller1
+:seller1 rdf:type owl:NamedIndividual ,
+                  :Seller ;
+         :managesStore :store1 ;
+         :sellsProduct :product1 ,
+                       :product2 ;
+         :hasSellerID "S001" ;
+         :hasSellerName "TechStore" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/seller2
+:seller2 rdf:type owl:NamedIndividual ,
+                  :Seller ;
+         :managesStore :store2 ;
+         :sellsProduct :product3 ,
+                       :product4 ;
+         :hasSellerID "S002" ;
+         :hasSellerName "OfficeMart" .
+
+
+###  http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/stationery
+:stationery rdf:type owl:NamedIndividual ,
+                     :Category .
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Buyer
+                :Order
+                :Payment
+                :Product
+                :Seller
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Category
+                :Order
+                :Payment
+                :PaymentMethod
+                :Review
+                :Seller
+                :Store
+                <http://xmlns.com/foaf/0.1/Person>
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointProperties ;
+  owl:members ( :hasBuyerID
+                :hasOrderID
+                :hasPaymentID
+                :hasProductID
+                :hasSellerID
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointProperties ;
+  owl:members ( :hasBuyerName
+                :hasProductName
+                :hasSellerName
+              )
+] .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi

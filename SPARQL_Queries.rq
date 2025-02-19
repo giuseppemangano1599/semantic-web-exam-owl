@@ -1,0 +1,89 @@
+# Q11.1. Find all products with a price of more than 10€ and return their name and category.
+
+PREFIX : <http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?productName ?category
+WHERE {
+    ?product a :Product ;
+        :hasPrice ?price ;
+		:hasProductName ?productName ;
+		:hasCategory ?category .
+FILTER(?price > "10.0"^^xsd:float)
+}
+
+
+# Q11.2. Among all orders, return the ID of five orders, starting from the third result, ordered by date.
+
+PREFIX : <http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/>
+
+SELECT ?orderID
+WHERE {
+    ?order a :Order ;
+             :hasOrderID ?orderID ;
+             :hasDate ?orderDate .
+}
+ORDER BY ?orderDate
+OFFSET 2
+LIMIT 5
+
+
+# Q11.3. For each seller, find the number of products they are selling.
+
+PREFIX : <http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/>
+
+SELECT ?sellerName (COUNT(?product)AS ?numberOfProducts)
+WHERE{
+    ?seller a :Seller ;
+              :hasSellerName ?sellerName ;
+              :sellsProduct ?product.
+}
+GROUP BY ?sellerName
+
+
+# Q11.4. Retrieve the list of products that have received at least one review with a rating of 5 stars.
+
+PREFIX : <http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?productName
+WHERE {
+    ?review a :Review;
+              :hasReviewRating ?rating ;
+              :isReviewOf ?product .
+
+?product :hasProductName ?productName .
+
+FILTER(?rating = "5"^^xsd:positiveInteger)
+}
+
+
+# Q11.5. Retrieve the names and IDs of all buyers who placed one order since January 1st, 2025.
+
+PREFIX : <http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?buyerName ?buyerID
+WHERE{
+    ?buyer a :Buyer ;
+             :hasBuyerName ?buyerName ;
+             :hasBuyerID ?buyerID ;
+             :placesOrder ?order.
+
+?order :hasDate ?orderDate .
+
+FILTER(?orderDate >= "2025-01-01T00:00:00"^^xsd:dateTime)
+}
+
+
+# Q11.6. Find the average product price for each category, grouped by category.
+
+PREFIX : <http://www.semanticweb.org/SemanticWebExam/mangano/ECommerceOntology/>
+
+SELECT ?category (AVG(?price)AS ?averagePrice)
+WHERE{
+    ?product a :Product;
+               :hasPrice ?price ;
+               :hasCategory ?category .
+}
+GROUP BY ?category
